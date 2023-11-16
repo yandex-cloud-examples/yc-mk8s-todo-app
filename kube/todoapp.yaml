@@ -1,0 +1,161 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoapp-v1
+  labels:
+    app: todoapp
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todoapp
+      version: v1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/metrics'
+        prometheus.io/port: '5000'
+      labels:
+        app: todoapp
+        version: v1
+    spec:
+      containers:
+      - name: todoapp
+        image: cr.yandex/sol/todoapp/app:1.0
+        imagePullPolicy: Always
+        env:
+        - name: REDIS_HOST
+          value: "todoapp-redis"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoapp-v2
+  labels:
+    app: todoapp
+    version: v2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todoapp
+      version: v2
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/metrics'
+        prometheus.io/port: '5000'
+      labels:
+        app: todoapp
+        version: v2
+    spec:
+      containers:
+      - name: todoapp
+        image: cr.yandex/sol/todoapp/app:2.0
+        imagePullPolicy: Always
+        env:
+        - name: REDIS_HOST
+          value: "todoapp-redis"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommender-v1
+  labels:
+    app: recommender
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: recommender
+      version: v1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/metrics'
+        prometheus.io/port: '5000'
+      labels:
+        app: recommender
+        version: v1
+    spec:
+      containers:
+      - name: recommender
+        image: cr.yandex/sol/todoapp/recommender:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoapp-redis-v1
+  labels:
+    app: todoapp-redis
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todoapp-redis
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: todoapp-redis
+        version: v1
+    spec:
+      containers:
+      - name: redis
+        image: redis:latest
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todoapp
+  labels:
+    app: todoapp
+    service: todoapp
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 5000
+  selector:
+    app: todoapp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recommender
+  labels:
+    app: recommender
+    service: recommender
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 5000
+  selector:
+    app: recommender
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todoapp-redis
+  labels:
+    app: todoapp-redis
+    service: todoapp-redis
+spec:
+  ports:
+    - name: redis
+      port: 6379
+  selector:
+    app: todoapp-redis

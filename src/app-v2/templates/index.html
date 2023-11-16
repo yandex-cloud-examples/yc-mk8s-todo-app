@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тудуапп</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h2 class="text-center">Тудуапп</h2>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Список дел</h5>
+                        <form action="/add" method="post" class="mb-3">
+                            <div class="input-group">
+                                <input type="text" name="todo" placeholder="Добавить" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Добавить</button>
+                                </div>
+                            </div>
+                        </form>
+                        <ul class="list-group">
+                        {% for todo, completed in todos.items() %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {% if completed == "1" %}
+                                    <strike>{{ todo }}</strike>
+                                {% else %}
+                                    {{ todo }}
+                                    <a href="/complete/{{ todo }}" class="badge badge-success">✓</a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                        <a href="/clear" class="btn btn-danger mt-3">Очистить</a>
+                    </div>
+                    <div class="card-footer text-success">
+                        <small>Обработано подом {{ base_pod }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if condition %}
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Рекомендуем</h5>
+                        <p><span class="badge bg-warning mr-2">&#9733;</span>{{ response_text }}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Обработано подом {{ response_pod }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Optional: Include jQuery and Bootstrap's JS for any interactive components -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
