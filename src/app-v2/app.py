@@ -15,12 +15,15 @@ def index():
     todos = {k.decode(): v.decode() for k, v in db.hgetall('todos').items()}
     
     base_pod = f"{os.environ.get('HOSTNAME', 'unknown')}"
-    response = requests.get('http://recommender/hello')
+    try:
+        response = requests.get('http://recommender/hello', timeout=3.0)
+    except BaseException:
+        response = None
 
     condition = False
     response_text = "n/a"
 
-    if response.status_code == 200:
+    if response and response.status_code == 200:
         condition = True
         data = response.json()
         
