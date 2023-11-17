@@ -28,10 +28,10 @@ spec:
         subset: v1
         port:
           number: 80
-      weight: 25
+      weight: 50
     - destination:
         host: todoapp
         subset: v2
         port:
           number: 80
-      weight: 75
+      weight: 50
