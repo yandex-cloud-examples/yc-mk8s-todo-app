@@ -1,5 +1,11 @@
 # Todoapp
 
+<img
+  src="img/app.png"
+  alt="Todoapp"
+  title="Todoapp"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
 Данный репозиторий содержит демонстрационное приложение для Kubernetes, состоящее из нескольких микросервисов.
 Приложение позволяет продемонстрировать различный функционал Istio, но может быть использован и в других демо сценариях, без использования Istio.
 
@@ -11,6 +17,14 @@
 Сервис `todoapp` имеет две версии:
 - Версия `v1` не делает обращений к сервису `recommend`.
 - Версия `v2` делает обращения к сервису `recommend` и выводит результат.
+
+Приложение выглядит следующим образом:
+
+<img
+  src="img/diagram.png"
+  alt="Todoapp Diagram"
+  title="Todoapp Diagram"
+  style="display: inline-block; margin: 0 auto; max-width: 400px">
 
 ## Установка
 
